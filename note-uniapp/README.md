@@ -1,39 +1,46 @@
-#### 基本介绍
+<p align="center">
+    <!--img alt="logo" src="https://oscimg.oschina.net/oscnet/up-dd77653d7c9f197dd9d93684f3c8dcfbab6.png"-->
+</p>
+<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">note v1.0.0</h1>
+<h4 align="center">基于SpringBoot Uni-App开发</h4>
+<p align="center">
+   <a href="https://gitee.com/y_project/RuoYi/blob/master/LICENSE"><img src="https://img.shields.io/github/license/mashape/apistatus.svg"></a>
+</p>
 
-note 用于记录平常的一些备忘记录，账号密码，消费账单
+## 平台简介
 
-前端基于uni-app开发，后端基于springBoot
+一直想做一款记录系统。于是利用空闲休息时间开始自己写了一套记录系统。如此有了note。所有前端后台代码封装过后十分精简易上手，出错概率低。同时支持移动客户端访问。系统会陆续更新一些实用功能。
 
-#### 详细介绍
+note是一套全部开源的记录系统，毫无保留给所有人免费使用。
 
-  该项目分三个模块
+## ## 内置功能
 
-1. 记录 
-   1.1  用于记录一些容易忘记的事
-   1.2  对计划的一个安排
+- 前端采用Vue、uview-ui、luch-request。
+- 后端采用Spring Boot、mybatis-plus、Redis & Jwt。
+- 记录管理：有些容易忘记和要计划做的事情，所以用note记下来。
+- 密钥管理：很多平台的密码规则不一样，导致密码记混，所以用note记下来。
+- 账单管理：平常的消费流水、支出、收入、借款等，所以用note记下来。
 
-2. 密钥
-   2.1 平常自己注册网站，长时间不用可以先记录起来，方便以后查阅
-   2.2 账号密码太多了，人脑终归有限，先拿软年记起来
-   2.3 前后台数据都是密文，数据库中密码也是加密的
+## 注意
 
-3. 账单
-   3.1 就是记录一下平常的消费，支出、收入、借款等明细
+有些小bug，或者不足之处，希望大家多提提意见，彼此互相学习，多提升提升。
 
-#### 注意
+## 组件
 
-有些小bug，或者不足之处，希望大家多提提意见，彼此互相学习，多提升提升
+- HuTool
 
-#### 使用他人组件
+- fastjson  
 
--  uview-ui
+- z-paging  
 
--  z-paging
+- zhouWei-APPUpdate  
 
--  zhouWei-APPUpdate
+- male-editor  
 
--  male-editor
+- v-tabs  
 
--  v-tabs
+- 等等
 
--  等等
+## 在线体验
+
+## 演示图
