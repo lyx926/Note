@@ -13,7 +13,7 @@
 
 note是一套全部开源的记录系统，毫无保留给所有人免费使用。
 
-## ## 内置功能
+## 内置功能
 
 - 前端采用Vue、uview-ui、luch-request。
 - 后端采用Spring Boot、mybatis-plus、Redis & Jwt。
