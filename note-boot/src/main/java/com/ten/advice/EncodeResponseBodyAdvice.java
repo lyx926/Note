@@ -25,7 +25,7 @@ import java.util.Map;
 @ControllerAdvice(basePackages = "com.ten.controller")
 public class EncodeResponseBodyAdvice implements ResponseBodyAdvice {
 
-    private static final String CLIENT_PUBLIC_KEY="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCKChtvlneNph4MLHV+exPfTpnAwQpVzsgbVcfq1BfAqlPdIEci5VY0p0MRa5FMiCMlLTXHObmyHLenmMqcq2p+q2Jz6D8P+21Z/42N2JsdBpTOxqGrBbmTuCyNN8JW/1a4+zhkAEqQIDWCfgZoVQnhPOtoCFhgR41ZvZxv09yDZwIDAQAB";
+    private static final String CLIENT_PUBLIC_KEY="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCOk/idoOoCppEZpVHHKiUIhKPfMR3Tng4xGzGPA2mYWYe5npK3dkuzdhI0yWmgUUYqsccVvbploAudRpTPW0ncxgX/KBtMT7MIx4SpLdHeY6Y+etrAH3BnV7s1jjo6gFLSizGT8HCLspRf/XhT14WikMeWkJuBeMgrZI2niq4GFQIDAQAB";
 
     @Override
     public boolean supports(MethodParameter returnType, Class converterType) {

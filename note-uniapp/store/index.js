@@ -9,7 +9,7 @@ const store = new Vuex.Store({
 		userInfo: {},
 		loginStatus:false,
 		isTemporary:false,
-		version: "1.0.6",
+		version: "1.0.1",
 	},
 	mutations: {
 		//更新state数据

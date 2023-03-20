@@ -3,24 +3,22 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: root
-    url: jdbc:mysql://127.0.0.1:3306/tickler?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8
-    type: com.zaxxer.hikari.HikariDataSource
-    hikari:
-      pool-name: DatebookHikariCP
-      auto-commit: true
-      minimumIdle: 5
-      maximumPoolSize: 50
-      maxLifetime: 180000
-      idleTimeout: 60000
-      connectionTimeout: 20000
-      connection-test-query: SELECT 'x' FROM DUAL
+    username: "iJzW/yOyq3QnK1NFQBIApg=="
+    password: "zy7C11fUyAkkxPsZ1GmkzA=="
+    jdbcUrl: jdbc:mysql://192.168.10.108:5306/tickler?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8
+    pool-name: DatebookHikariCP
+    auto-commit: true
+    minimumIdle: 5
+    maximumPoolSize: 50
+    maxLifetime: 180000
+    idleTimeout: 60000
+    connectionTimeout: 20000
+    connection-test-query: SELECT 'x' FROM DUAL
   redis:
     database: 0
-    host: 127.0.0.1
+    host: 192.168.10.108
     port: 6379
-    password:
+    password: system
     timeout: 5000
     lettuce:
       pool:

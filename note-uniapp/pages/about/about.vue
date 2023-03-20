@@ -1,12 +1,13 @@
 <template>
 	<view class="container">
 		<view class="flex align-center justify-center flex-column" style="height: 300rpx;">
-			<u--image src="/static/logo.png" width="64" height="64"></u--image>
+			<!-- <u--image src="/static/logo.png" width="64" height="64"></u--image> -->
+			note
 			<view style="height: 40px;" class="flex align-center">
 				<text>Version {{version}}</text>
 			</view>
 		</view>
-		<view class="content-box">
+		<view class="content-box" v-if="false">
 			<view class="content">项目可能存在缺陷或者bug，如果您在使用过程中发现问题或者有更好的建议，可反馈给我。</view>
 			<view class="content">您可以通过反馈或者以下方式联系我！</view>
 			<view class="content">

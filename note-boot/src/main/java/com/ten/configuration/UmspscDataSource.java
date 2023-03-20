@@ -48,7 +48,10 @@ public class UmspscDataSource extends HikariDataSource {
     }
 
     public static void main(String[] args) throws Exception {
-
+        String root = AesUtil.encrypt("root", USERNAME_PKEY, false);
+        String system = AesUtil.encrypt("system", PASSWORD_PKEY, false);
+        System.out.println(root);
+        System.out.println(system);
         String passwordDis=AesUtil.decrypt("RtT8Dd35ke4+0WuV99KU5Q==",PASSWORD_PKEY,false);
         System.out.println(passwordDis);
     }
