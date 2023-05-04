@@ -15,8 +15,8 @@ note是一套全部开源的记录系统，毫无保留给所有人免费使用�
 
 ## 内置功能
 
-- 前端采用Vue、uview-ui、luch-request。
-- 后端采用Spring Boot、mybatis-plus、Redis & Jwt。
+- 前端采用Vue、uview-ui。
+- 后端采用Spring Boot、mybatis、Redis & Jwt。
 - 记录管理：有些容易忘记和要计划做的事情，所以用note记下来。
 - 密钥管理：很多平台的密码规则不一样，导致密码记混，所以用note记下来。
 - 账单管理：平常的消费流水、支出、收入、借款等，所以用note记下来。
@@ -29,15 +29,15 @@ note是一套全部开源的记录系统，毫无保留给所有人免费使用�
 
 - HuTool
 
-- fastjson  
+- fastjson
 
-- z-paging  
+- z-paging
 
-- zhouWei-APPUpdate  
+- zhouWei-APPUpdate
 
-- male-editor  
+- male-editor
 
-- v-tabs  
+- v-tabs
 
 - 等等
 
