@@ -797,7 +797,7 @@
 		flex-direction: row;
 		align-items: center;
 		justify-content: center;
-		padding: 0 10px;
+		padding: 0 5px;
 		border-radius: 4px;
 		background-color: #fff;
 		color: #666;
@@ -815,6 +815,7 @@
 		display: flex;
 		align-items: center;
 		position: relative;
+		background-color: #fff;
 	}
 
 	.uni-date-editor--x .uni-date__icon-clear {
@@ -827,7 +828,7 @@
 	}
 
 	.uni-date__x-input {
-		padding: 0 8px;
+		padding: 0 4px;
 		/* #ifndef APP-NVUE */
 		width: auto;
 		/* #endif */
@@ -835,7 +836,7 @@
 		overflow: hidden;
 		flex: 1;
 		line-height: 1;
-		font-size: 14px;
+		font-size: 12px;
 		height: 35px;
 	}
 

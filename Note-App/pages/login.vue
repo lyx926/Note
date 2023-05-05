@@ -137,7 +137,7 @@
     .login-form-content {
       text-align: center;
       margin: 20px auto;
-      margin-top: 15%;
+      margin-top: 35%;
       width: 80%;
 
       .input-item {

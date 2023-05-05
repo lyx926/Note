@@ -2,6 +2,7 @@
 module.exports = {
   // baseUrl: 'https://vue.ruoyi.vip/prod-api',
   baseUrl: 'https://liuyixiang.xyz/prod-api/',
+  // baseUrl: 'http://localhost:8080',
   // 应用信息
   appInfo: {
     // 应用名称

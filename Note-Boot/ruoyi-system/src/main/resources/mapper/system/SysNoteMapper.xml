@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysNoteMapper">
+    
+    <resultMap type="SysNote" id="SysNoteResult">
+        <result property="noteId"    column="note_id"    />
+        <result property="noteTitle"    column="note_title"    />
+        <result property="reminderDate"    column="reminder_date"    />
+        <result property="noteContent"    column="note_content"    />
+        <result property="noteStatus"    column="note_status"    />
+        <result property="noteType"    column="note_type"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSysNoteVo">
+        select note_id, note_title, reminder_date, note_content, note_status, note_type, del_flag, create_by, create_time, update_by, update_time, remark from sys_note
+    </sql>
+
+    <select id="selectSysNoteList" parameterType="SysNote" resultMap="SysNoteResult">
+        <include refid="selectSysNoteVo"/>
+        <where>  
+            <if test="noteTitle != null  and noteTitle != ''"> and note_title = #{noteTitle}</if>
+            <if test="reminderDate != null "> and reminder_date = #{reminderDate}</if>
+            <if test="noteContent != null  and noteContent != ''"> and note_content = #{noteContent}</if>
+            <if test="noteStatus != null  and noteStatus != ''"> and note_status = #{noteStatus}</if>
+            <if test="noteType != null  and noteType != ''"> and note_type = #{noteType}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysNoteByNoteId" parameterType="Long" resultMap="SysNoteResult">
+        <include refid="selectSysNoteVo"/>
+        where note_id = #{noteId}
+    </select>
+        
+    <insert id="insertSysNote" parameterType="SysNote" useGeneratedKeys="true" keyProperty="noteId">
+        insert into sys_note
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="noteTitle != null">note_title,</if>
+            <if test="reminderDate != null">reminder_date,</if>
+            <if test="noteContent != null">note_content,</if>
+            <if test="noteStatus != null">note_status,</if>
+            <if test="noteType != null">note_type,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="noteTitle != null">#{noteTitle},</if>
+            <if test="reminderDate != null">#{reminderDate},</if>
+            <if test="noteContent != null">#{noteContent},</if>
+            <if test="noteStatus != null">#{noteStatus},</if>
+            <if test="noteType != null">#{noteType},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysNote" parameterType="SysNote">
+        update sys_note
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="noteTitle != null">note_title = #{noteTitle},</if>
+            <if test="reminderDate != null">reminder_date = #{reminderDate},</if>
+            <if test="noteContent != null">note_content = #{noteContent},</if>
+            <if test="noteStatus != null">note_status = #{noteStatus},</if>
+            <if test="noteType != null">note_type = #{noteType},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where note_id = #{noteId}
+    </update>
+
+    <delete id="deleteSysNoteByNoteId" parameterType="Long">
+        delete from sys_note where note_id = #{noteId}
+    </delete>
+
+    <delete id="deleteSysNoteByNoteIds" parameterType="String">
+        delete from sys_note where note_id in 
+        <foreach item="noteId" collection="array" open="(" separator="," close=")">
+            #{noteId}
+        </foreach>
+    </delete>
+</mapper>

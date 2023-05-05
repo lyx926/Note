@@ -3,7 +3,7 @@
 		<!-- <page-head :title="title"></page-head> -->
 		<view class="uni-padding-wrap uni-common-mt">
 			<!-- <view style="font-size: 12px; color: #666;">注：PC 不支持下拉刷新</view> -->
-			<view class="text" v-for="(num,index) in data" :key="index"><!-- list - {{num}} -->
+			<view class="text" v-for="(row,index) in noteList" :key="index"><!-- list - {{num}} -->
 				<uni-swipe-action>
 					<!-- <uni-swipe-action-item :left-options="options2" :threshold="0" :right-options="options1"
 						@click="bindClick">
@@ -18,12 +18,13 @@
 									@click="bindClick({position:'left',content:{text:'置顶'}})">置顶</text>
 							</view>
 						</template> -->
-						<view class="content-box" @click="contentClick">
-							<text class="content-text">笔记标题</text>
+						<view class="content-box" @click="contentClick(row.noteId)">
+							<text class="content-text">{{row.noteTitle}}</text>
 						</view>
 						<template v-slot:right>
-									<view class="slot-button" @click="bindClick({position:'right',content:{text:'删除'}})"><text
-											class="slot-button-text">删除</text></view>
+							<view class="slot-button"
+								@click="bindClick({noteId:row.noteId,position:'right',content:{text:'删除'}})"><text
+									class="slot-button-text">删除</text></view>
 						</template>
 					</uni-swipe-action-item>
 					<!-- <uni-swipe-action-item :right-options="options1" @click="bindClick">
@@ -42,9 +43,31 @@
 	</view>
 </template>
 <script>
+	import {
+		listNote,
+		getNote,
+		delNote,
+		addNote,
+		updateNote
+	} from "@/api/system/note";
 	export default {
 		data() {
 			return {
+				// 总条数
+				total: 0,
+				// 笔记表格数据
+				noteList: [],
+				// 查询参数
+				queryParams: {
+					pageNum: 1,
+					pageSize: 20,
+					noteTitle: null,
+					reminderDate: null,
+					noteContent: null,
+					noteStatus: null,
+					noteType: null,
+				},
+
 				title: '下拉刷新 + 加载更多',
 				data: [],
 				loadMoreText: "加载中...",
@@ -122,6 +145,9 @@
 		onLoad() {
 			this.initData();
 		},
+		onShow() {
+			this.initData();
+		},
 		onReady() {
 			// 模拟延迟赋值
 			setTimeout(() => {
@@ -129,7 +155,6 @@
 			}, 1000);
 
 			uni.$on('update', res => {
-				console.log(111);
 				this.swipeClick({
 					content: {
 						text: '添加'
@@ -137,42 +162,53 @@
 				})
 			})
 		},
+		/* 
+		 if (that.noteList.length >= that.total) {
+		 	uni.stopPullDownRefresh();
+		 }
+		 */
 		onUnload() {
-			this.max = 0,
-				this.data = [],
-				this.loadMoreText = "加载更多",
-				this.showLoadMore = false;
+			// 监听页面卸载
+			let that = this
+			that.noteList = []
+			that.loadMoreText = "加载更多"
+			that.showLoadMore = false
 		},
 		onReachBottom() {
-			console.log("onReachBottom");
-			if (this.max > 40) {
-				this.loadMoreText = "没有更多数据了!"
-				return;
+			// 触底触发
+			let that = this
+			// 数据下标大于等于总条数
+			if (that.noteList.length >= that.total) {
+				that.loadMoreText = "没有更多数据了!"
+				return
 			}
-			this.showLoadMore = true;
+			that.showLoadMore = true
+			// 下一页方法
 			setTimeout(() => {
-				this.setListData();
-			}, 300);
+				that.setListData()
+			}, 300)
 		},
 		onPullDownRefresh() {
-			console.log('onPullDownRefresh');
 			this.initData();
 		},
 		methods: {
 
-			contentClick() {
-				console.log('点击内容');
+			contentClick(noteId) {
 				uni.showToast({
 					title: '点击内容',
 					icon: 'none'
 				})
+				this.$tab.reLaunch(`/pages/editor/editor?noteId=${noteId}`)
 			},
 			bindClick(e) {
-				console.log(e);
-				uni.showToast({
+				/* uni.showToast({
 					title: `点击了${e.position === 'left' ? '左侧' : '右侧'} ${e.content.text}按钮`,
 					icon: 'none'
-				});
+				}); */
+				delNote(e.noteId);
+				this.noteList = []
+				this.queryParams.pageNum = 1
+				this.initData();
 			},
 			setOpened() {
 				if (this.isOpened === 'none') {
@@ -190,12 +226,8 @@
 			},
 			change(e) {
 				this.isOpened = e;
-				console.log('返回：', e);
 			},
-			swipeChange(e, index) {
-				console.log('返回：', e);
-				console.log('当前索引：', index);
-			},
+			swipeChange(e, index) {},
 			swipeClick(e, index) {
 				let {
 					content
@@ -207,9 +239,7 @@
 						success: res => {
 							if (res.confirm) {
 								this.swipeList.splice(index, 1);
-							} else if (res.cancel) {
-								console.log('用户点击取消');
-							}
+							} else if (res.cancel) {}
 						}
 					});
 				} else if (content.text === '添加') {
@@ -252,37 +282,34 @@
 				}
 			},
 			initData() {
-				setTimeout(() => {
-					this.max = 0;
-					this.data = [];
-					let data = [];
-					this.max += 20;
-					for (var i = this.max - 19; i < this.max + 1; i++) {
-						data.push(i)
-					}
-					this.data = this.data.concat(data);
-					uni.stopPullDownRefresh();
-				}, 300);
+				let that = this
+				// 默认页
+				listNote(that.queryParams).then(response => {
+					that.noteList = response.rows;
+					that.total = response.total;
+				});
 			},
 			setListData() {
-				let data = [];
-				this.max += 10;
-				for (var i = this.max - 9; i < this.max + 1; i++) {
-					data.push(i)
-				}
-				this.data = this.data.concat(data);
+				let that = this
+				// 页数+1
+				that.queryParams.pageNum += 1
+				listNote(that.queryParams).then(response => {
+					that.total = response.total;
+					// 拼接新一页数据
+					that.noteList = that.noteList.concat(response.rows);
+				});
 			}
 		}
 	}
 </script>
 
 <style>
-	.uni-loadmore{
+	.uni-loadmore {
 		width: 100%;
 		display: flex;
 		justify-content: center;
 	}
-	
+
 	.text {
 		margin: 16rpx 0;
 		width: 100%;
@@ -293,7 +320,7 @@
 		color: #555;
 		border-radius: 8rpx;
 	}
-	
+
 	.content-box {
 		flex: 1;
 		/* #ifdef APP-NVUE */
@@ -308,11 +335,11 @@
 		border-bottom-width: 1px;
 		border-bottom-style: solid;
 	}
-	
+
 	.content-text {
 		font-size: 15px;
 	}
-	
+
 	.example-body {
 		/* #ifndef APP-NVUE */
 		display: flex;
@@ -322,7 +349,7 @@
 		padding: 10px 0;
 		background-color: #fff;
 	}
-	
+
 	.button {
 		border-color: #e5e5e5;
 		border-style: solid;
@@ -330,11 +357,11 @@
 		padding: 4px 8px;
 		border-radius: 4px;
 	}
-	
+
 	.button-text {
 		font-size: 15px;
 	}
-	
+
 	.slot-button {
 		/* #ifndef APP-NVUE */
 		display: flex;
@@ -347,7 +374,7 @@
 		padding: 0 20px;
 		background-color: #ff5a5f;
 	}
-	
+
 	.slot-button-text {
 		color: #ffffff;
 		font-size: 14px;

@@ -1,49 +1,21 @@
 <template>
 	<view class="container">
-		<view class="">
-			<view style="">
-				<view class="" style="display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: center;
-		padding: 0 10px;
-		border-radius: 4px;
-		background-color: #fff;
-		color: #666;
-		font-size: 14px;
-		flex: 1;">
-					<uni-icons type="compose" color="#c0c4cc" size="22"></uni-icons>
-					<input style="padding: 0 8px;
-		width: auto;
-		position: relative;
-		overflow: hidden;
-		flex: 1;
-		line-height: 1;
-		font-size: 14px;
-		height: 35px;" placeholder="输入笔记标题" />
-					<!-- <uni-easyinput style="padding: 0 8px;
-		width: auto;
-		position: relative;
-		overflow: hidden;
-		flex: 1;
-		line-height: 1;
-		font-size: 14px;
-		height: 35px;" placeholder="请输入内容" ></uni-easyinput> -->
-					<!-- v-model="value" @input="input" -->
-				</view>
-				<view class="">
-					<uni-datetime-picker placeholder="选择笔记日期" v-model="single" />
-				</view>
-				<view class="">
-					<button class="mini-btn"
-						style="width: 100%;height: 100%;display: flex;justify-content: center;align-items: center;"
-						type="primary" size="mini">新增</button>
-				</view>
-			</view>
-		</view>
 		<view class="page-body">
 			<view class='wrapper'>
-				<view class='toolbar' @tap="format" style="height: 120px;overflow-y: auto;">
+				<view class='toolbar' @tap="format" style="overflow-y: auto;">
+					<view class="">
+						<uni-datetime-picker placeholder="提醒日期" v-model="form.reminderDate" />
+					</view>
+					<view class="" style="background-color: #fff;">
+						<uni-easyinput prefixIcon="info" v-model="form.noteTitle" placeholder="笔记标题"></uni-easyinput>
+					</view>
+					<view class="" style="display: flex;justify-content: space-around;">
+						<button style="width: 50%;" type="default" size="mini" @click="createNote">+</button>
+						<button style="width: 50%;" type="primary" size="mini" @click="submitForm"
+							v-if="form.noteId == null">存笔记</button>
+						<button style="width: 50%;" type="warn" size="mini" @click="submitForm"
+							v-else-if="form.noteId != null">改笔记</button>
+					</view>
 					<view :class="formats.bold ? 'ql-active' : ''" class="iconfont icon-zitijiacu" data-name="bold">
 					</view>
 					<view :class="formats.italic ? 'ql-active' : ''" class="iconfont icon-zitixieti" data-name="italic">
@@ -117,14 +89,22 @@
 </template>
 
 <script>
+	import {
+		listNote,
+		getNote,
+		delNote,
+		addNote,
+		updateNote
+	} from "@/api/system/note";
 	export default {
 		data() {
 			return {
 				readOnly: false,
 				formats: {},
 
-				single: '',
 				content: '<h1>测试h1标签</h1>',
+				noteId: 0,
+				form: {},
 			}
 		},
 		methods: {
@@ -133,7 +113,7 @@
 			},
 			onEditorReady() {
 				uni.createSelectorQuery().select('#editor').context((res) => {
-					var contentVal_1 = this.content;
+					var contentVal_1 = this.form.noteContent;
 					//将内容写入编辑器
 					this.editorCtx = res.context;
 					let EContent = {
@@ -154,12 +134,11 @@
 					value
 				} = e.target.dataset
 				if (!name) return
-				// console.log('format', name, value)
 				this.editorCtx.format(name, value)
 
 			},
 			getEditorContent(e) {
-				this.content = e.detail.html;
+				this.form.noteContent = e.detail.html;
 			},
 			onStatusChange(e) {
 				const formats = e.detail
@@ -167,17 +146,21 @@
 			},
 			insertDivider() {
 				this.editorCtx.insertDivider({
-					success: function() {
-						console.log('insert divider success')
-					}
+					success: function() {}
 				})
 			},
 			clear() {
 				this.editorCtx.clear({
-					success: function(res) {
-						console.log("clear success")
-					}
+					success: function(res) {}
 				})
+				this.form = {}
+			},
+			createNote() {
+				this.editorCtx.clear({
+					success: function(res) {}
+				})
+				this.form = {}
+				this.noteId = 0
 			},
 			removeFormat() {
 				this.editorCtx.removeFormat()
@@ -196,15 +179,32 @@
 						this.editorCtx.insertImage({
 							src: res.tempFilePaths[0],
 							alt: '图像',
-							success: function() {
-								console.log('insert image success')
-							}
+							success: function() {}
 						})
 					}
 				})
+			},
+			submitForm() {
+				if (this.form.noteId != null) {
+					updateNote(this.form).then(response => {
+						this.$modal.msgSuccess("修改成功");
+					});
+				} else {
+					addNote(this.form).then(response => {
+						this.$modal.msgSuccess("新增成功");
+					});
+				}
 			}
 		},
-		onLoad() {
+		onLoad(params) {
+			let that = this
+			that.noteId = params.noteId
+			if (that.noteId && parseInt(that.noteId) !== 0) {
+				getNote(that.noteId).then(response => {
+					this.form = response.data;
+					that.onEditorReady();
+				});
+			}
 			uni.loadFontFace({
 				family: 'Pacifico',
 				source: 'url("https://sungd.github.io/Pacifico.ttf")'
@@ -225,7 +225,7 @@
 	}
 
 	.editor-wrapper {
-		height: calc(100vh - var(--window-top) - var(--status-bar-height) - 140px);
+		height: calc(100vh - var(--window-top) - var(--status-bar-height) - 250px);
 		background: #fff;
 	}
 
